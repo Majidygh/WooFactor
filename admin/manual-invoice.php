@@ -84,6 +84,9 @@ function woo_factor_list_manual_invoice_files() {
         $json = json_decode($content, true);
         if (!is_array($json)) continue;
 
+        $payment_status = $json['payment_status'] ?? ($json['status'] ?? 'paid');
+        $status_name = $json['status_name'] ?? ($payment_status === 'unpaid' ? 'تسویه نشده' : ($payment_status === 'proforma' ? 'پیش‌فاکتور' : ($payment_status === 'none' ? 'صادر شد' : 'تسویه شده')));
+
         $list[] = [
             'invoice_number' => $json['invoice_number'] ?? $basename,
             'buyer_name'     => $json['buyer']['name'] ?? 'مشتری محترم',
@@ -93,6 +96,8 @@ function woo_factor_list_manual_invoice_files() {
             'grand_total'    => $json['totals']['grand_total'] ?? 0,
             'currency'       => $json['totals']['currency'] ?? 'تومان',
             'template'       => $json['template'] ?? 'classic',
+            'payment_status' => $payment_status,
+            'status_name'    => $status_name,
             'created_at'     => $json['created_at'] ?? filemtime($file),
         ];
     }
@@ -139,6 +144,9 @@ function woo_factor_render_manual_invoice_page() {
     $default_inv_num = $is_edit ? $edit_data['invoice_number'] : ('MAN-' . wp_rand(10000, 99999));
     $default_template = $is_edit ? ($edit_data['template'] ?? 'classic') : ($opts['template'] ?? 'classic');
     $default_currency = $is_edit ? ($edit_data['currency'] ?? 'تومان') : 'تومان';
+    $default_payment_status = $is_edit ? ($edit_data['payment_status'] ?? ($edit_data['status'] ?? 'paid')) : 'paid';
+    $default_watermark_mode = $is_edit ? ($edit_data['watermark_mode'] ?? 'auto') : 'auto';
+    $default_custom_watermark = $is_edit ? ($edit_data['custom_watermark'] ?? ($edit_data['watermark_text'] ?? '')) : '';
     $buyer = $edit_data['buyer'] ?? [];
     $items = $edit_data['items'] ?? [];
     $totals = $edit_data['totals'] ?? [];
@@ -228,6 +236,27 @@ function woo_factor_render_manual_invoice_page() {
                             <option value="ریال" <?php selected($default_currency, 'ریال'); ?>>ریال</option>
                             <option value="هزار تومان" <?php selected($default_currency, 'هزار تومان'); ?>>هزار تومان</option>
                         </select>
+                    </div>
+                    <div>
+                        <label><strong>وضعیت تسویه و پرداخت:</strong></label><br>
+                        <select name="payment_status" id="manual_payment_status" style="width: 100%; font-weight: bold;">
+                            <option value="paid" <?php selected($default_payment_status, 'paid'); ?>>🟢 پرداخت شده / تسویه کامل</option>
+                            <option value="unpaid" <?php selected($default_payment_status, 'unpaid'); ?>>🟡 پرداخت نشده / در انتظار تسویه</option>
+                            <option value="proforma" <?php selected($default_payment_status, 'proforma'); ?>>🔵 پیش‌فاکتور (غیرقطعی)</option>
+                            <option value="none" <?php selected($default_payment_status, 'none'); ?>>⚪ فاکتور عادی بدون وضعیت پرداخت</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label><strong>متن واترمارک پس‌زمینه:</strong></label><br>
+                        <select name="watermark_mode" id="manual_watermark_mode" style="width: 100%;">
+                            <option value="auto" <?php selected($default_watermark_mode, 'auto'); ?>>خودکار بر اساس وضعیت پرداخت</option>
+                            <option value="none" <?php selected($default_watermark_mode, 'none'); ?>>بدون واترمارک (خام و بدون مهر متن)</option>
+                            <option value="custom" <?php selected($default_watermark_mode, 'custom'); ?>>متن دلخواه...</option>
+                        </select>
+                    </div>
+                    <div id="manual_custom_watermark_wrap" style="<?php echo $default_watermark_mode === 'custom' ? '' : 'display: none;'; ?>">
+                        <label><strong>متن دلخواه واترمارک:</strong></label><br>
+                        <input type="text" name="custom_watermark" value="<?php echo esc_attr($default_custom_watermark); ?>" placeholder="مثال: تسویه شد / امانی / نسخه بایگانی" class="regular-text" style="width: 100%;">
                     </div>
                 </div>
                 <div style="margin-top: 12px;">
@@ -374,13 +403,14 @@ function woo_factor_render_manual_invoice_page() {
                 <table class="wp-list-table widefat fixed striped" style="margin-top: 10px;">
                     <thead>
                         <tr>
-                            <th style="width: 15%;">شماره فاکتور</th>
-                            <th style="width: 20%;">نام خریدار</th>
-                            <th style="width: 15%;">شماره تماس</th>
-                            <th style="width: 14%;">تاریخ صدور</th>
-                            <th style="width: 8%; text-align: center;">اقلام</th>
-                            <th style="width: 14%;">مبلغ کل</th>
-                            <th style="width: 14%; text-align: center;">عملیات</th>
+                            <th style="width: 14%;">شماره فاکتور</th>
+                            <th style="width: 18%;">نام خریدار</th>
+                            <th style="width: 13%;">شماره تماس</th>
+                            <th style="width: 12%;">تاریخ صدور</th>
+                            <th style="width: 13%; text-align: center;">وضعیت تسویه</th>
+                            <th style="width: 7%; text-align: center;">اقلام</th>
+                            <th style="width: 11%;">مبلغ کل</th>
+                            <th style="width: 12%; text-align: center;">عملیات</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -413,6 +443,20 @@ function woo_factor_render_manual_invoice_page() {
                                 <td><strong><?php echo esc_html($inv['buyer_name']); ?></strong></td>
                                 <td><?php echo woo_factor_fa_digits($inv['buyer_phone']); ?></td>
                                 <td><?php echo woo_factor_fa_digits($inv['jalali_date']); ?></td>
+                                <td style="text-align: center;">
+                                    <?php 
+                                    $p_status = $inv['payment_status'] ?? 'paid';
+                                    if ($p_status === 'paid') {
+                                        echo '<span style="background: #dcfce7; color: #15803d; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: bold;">✔ تسویه شده</span>';
+                                    } elseif ($p_status === 'unpaid') {
+                                        echo '<span style="background: #fef3c7; color: #b45309; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: bold;">⏳ تسویه نشده</span>';
+                                    } elseif ($p_status === 'proforma') {
+                                        echo '<span style="background: #e0f2fe; color: #0369a1; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: bold;">📄 پیش‌فاکتور</span>';
+                                    } else {
+                                        echo '<span style="background: #f1f5f9; color: #475569; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: bold;">' . esc_html($inv['status_name']) . '</span>';
+                                    }
+                                    ?>
+                                </td>
                                 <td style="text-align: center;"><?php echo woo_factor_fa_digits($inv['items_count']); ?> قلم</td>
                                 <td><strong><?php echo number_format($inv['grand_total']); ?></strong> <small><?php echo esc_html($inv['currency']); ?></small></td>
                                 <td style="text-align: center;">
@@ -521,6 +565,15 @@ function woo_factor_render_manual_invoice_page() {
                 alert('حداقل یک سطر کالا باید در فاکتور وجود داشته باشد.');
             }
         });
+
+        // Watermark Mode Toggle
+        $('#manual_watermark_mode').on('change', function(){
+            if ($(this).val() === 'custom') {
+                $('#manual_custom_watermark_wrap').slideDown(150);
+            } else {
+                $('#manual_custom_watermark_wrap').slideUp(150);
+            }
+        });
     });
     </script>
     <?php
@@ -623,6 +676,46 @@ add_action('wp_ajax_woo_factor_generate_manual_invoice', function () {
     $final_tax = max(0, $tax_input);
     $grand = max(0, $subtotal - $discount + $shipping + $final_tax);
 
+    $payment_status   = sanitize_text_field($_POST['payment_status'] ?? 'paid');
+    $watermark_mode   = sanitize_text_field($_POST['watermark_mode'] ?? 'auto');
+    $custom_watermark = sanitize_text_field($_POST['custom_watermark'] ?? '');
+
+    switch ($payment_status) {
+        case 'unpaid':
+            $status_key           = 'pending';
+            $status_name          = 'تسویه نشده';
+            $default_wm           = 'تسویه نشده';
+            $payment_method_label = 'در انتظار تسویه / پرداخت نشده';
+            break;
+        case 'proforma':
+            $status_key           = 'proforma';
+            $status_name          = 'پیش‌فاکتور';
+            $default_wm           = 'پیش‌فاکتور';
+            $payment_method_label = 'پیش‌فاکتور (غیرقطعی)';
+            break;
+        case 'none':
+            $status_key           = 'issued';
+            $status_name          = 'صادر شد';
+            $default_wm           = '';
+            $payment_method_label = 'تسویه مستقیم';
+            break;
+        case 'paid':
+        default:
+            $status_key           = 'completed';
+            $status_name          = 'تسویه شده';
+            $default_wm           = 'پرداخت شد';
+            $payment_method_label = 'نقدی / تسویه کامل';
+            break;
+    }
+
+    if ($watermark_mode === 'none') {
+        $final_watermark = '';
+    } elseif ($watermark_mode === 'custom') {
+        $final_watermark = $custom_watermark;
+    } else {
+        $final_watermark = $default_wm;
+    }
+
     $totals = [
         'subtotal'          => $subtotal,
         'discount'          => $discount,
@@ -632,7 +725,7 @@ add_action('wp_ajax_woo_factor_generate_manual_invoice', function () {
         'grand_total'       => $grand,
         'grand_total_words' => woo_factor_number_to_words($grand),
         'currency'          => $currency,
-        'payment_method'    => 'نقدی / تسویه مستقیم',
+        'payment_method'    => $payment_method_label,
         'transaction_id'    => '',
     ];
 
@@ -645,8 +738,11 @@ add_action('wp_ajax_woo_factor_generate_manual_invoice', function () {
         'invoice_number'       => $inv_num,
         'jalali_date'          => woo_factor_jdate(current_time('timestamp'), false),
         'jalali_time'          => woo_factor_jdate(current_time('timestamp'), true),
-        'status'               => 'completed',
-        'status_name'          => 'تسویه شده',
+        'status'               => $status_key,
+        'status_name'          => $status_name,
+        'payment_status'       => $payment_status,
+        'watermark_mode'       => $watermark_mode,
+        'custom_watermark'     => $custom_watermark,
         'seller'               => $seller,
         'buyer'                => $buyer,
         'items'                => $items,
@@ -659,7 +755,7 @@ add_action('wp_ajax_woo_factor_generate_manual_invoice', function () {
         'signature_stamp'      => $opts['signature_stamp'] ?? 'مهر و امضای فروشگاه',
         'stamp_url'            => $seller['stamp_url'],
         'color'                => woo_factor_normalize_color($opts['color'] ?? ''),
-        'watermark_text'       => 'پرداخت شد',
+        'watermark_text'       => $final_watermark,
         'template'             => $template,
         'currency'             => $currency,
         'created_at'           => current_time('timestamp'),
@@ -668,7 +764,7 @@ add_action('wp_ajax_woo_factor_generate_manual_invoice', function () {
         'show_sku'             => true,
         'show_tax_column'      => ($opts['show_tax_column'] ?? 'yes') === 'yes',
         'show_discount_column' => ($opts['show_discount_column'] ?? 'yes') === 'yes',
-        'show_watermark'       => ($opts['show_watermark'] ?? 'yes') === 'yes',
+        'show_watermark'       => !empty($final_watermark),
         'show_signature'       => ($opts['show_signature'] ?? 'yes') === 'yes',
     ];
 

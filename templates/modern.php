@@ -408,6 +408,87 @@ foreach ($items as $it) {
             line-height: 1.5;
         }
 
+        /* Mobile Responsive Screen Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 6px 4px;
+            }
+            .invoice-card {
+                padding: 12px 10px;
+                border-radius: 8px;
+                box-shadow: none;
+                width: 100%;
+                overflow-x: hidden;
+                box-sizing: border-box;
+            }
+            .mod-header-banner {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 12px;
+                padding: 14px 16px;
+            }
+            .mod-banner-meta {
+                flex-direction: column;
+                gap: 4px;
+                align-items: center;
+            }
+            .mod-banner-left {
+                flex-direction: column-reverse;
+                text-align: center;
+                align-items: center;
+            }
+            .meta-ribbon {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .parties-grid {
+                grid-template-columns: 1fr !important;
+                gap: 10px;
+            }
+            .items-box {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .items-table {
+                min-width: 520px;
+            }
+            .summary-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .summary-item {
+                justify-content: space-between;
+                width: 100%;
+            }
+            .grand-action-pill {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+                padding: 12px 16px;
+                border-radius: 14px;
+            }
+            .pill-right {
+                flex-direction: column;
+                gap: 4px;
+                text-align: center;
+            }
+            .bottom-strip {
+                flex-direction: column-reverse;
+                gap: 12px;
+                align-items: center;
+                text-align: center;
+            }
+            .watermark {
+                font-size: 32px !important;
+                padding: 8px 18px !important;
+                max-width: 90% !important;
+            }
+        }
+
         /* Print Media Styles */
         @media print {
             body {
@@ -480,12 +561,32 @@ foreach ($items as $it) {
             <span class="lbl">💳 روش پرداخت:</span>
             <strong class="val"><?php echo esc_html($data['payment_method'] ?: 'پرداخت آنلاین'); ?></strong>
         </div>
-        <div class="ribbon-pill" style="justify-content: center;">
-            <span class="status-badge-glow">
-                <span class="status-dot-green"></span>
-                <span>پرداخت موفق</span>
-            </span>
-        </div>
+        <?php 
+        $status_title = !empty($data['status_name']) ? $data['status_name'] : (!empty($data['status']) ? $data['status'] : '');
+        $status_key = strtolower($data['status'] ?? '');
+        $is_paid = in_array($status_key, ['completed', 'processing', 'paid']) || (!empty($data['watermark_text']) && strpos($data['watermark_text'], 'پرداخت شد') !== false);
+        $is_pending = in_array($status_key, ['pending', 'on-hold', 'unpaid']);
+        ?>
+        <?php if (!empty($status_title)): ?>
+            <div class="ribbon-pill" style="justify-content: center;">
+                <?php if ($is_paid): ?>
+                    <span class="status-badge-glow">
+                        <span class="status-dot-green"></span>
+                        <span><?php echo esc_html($status_title); ?></span>
+                    </span>
+                <?php elseif ($is_pending): ?>
+                    <span class="status-badge-glow" style="background: #fffbeb; color: #b45309; border-color: #fde68a;">
+                        <span class="status-dot-green" style="background: #f59e0b;"></span>
+                        <span><?php echo esc_html($status_title); ?></span>
+                    </span>
+                <?php else: ?>
+                    <span class="status-badge-glow" style="background: #f1f5f9; color: #475569; border-color: #cbd5e1;">
+                        <span class="status-dot-green" style="background: #64748b;"></span>
+                        <span><?php echo esc_html($status_title); ?></span>
+                    </span>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     </div>
 
     <!-- Dual-Tone Parties Grid -->
@@ -635,7 +736,11 @@ foreach ($items as $it) {
             <span class="pill-total-amount"><?php echo woo_factor_number_format($totals['grand_total']); ?> <?php echo esc_html($currency); ?></span>
         </div>
         <div class="pill-left-badge">
-            ✔ پرداخت شده و نهایی
+            <?php 
+            $status_icon = $is_paid ? '✔' : ($is_pending ? '⏳' : '📋');
+            $status_label = !empty($data['status_name']) ? $data['status_name'] : (!empty($data['watermark_text']) ? $data['watermark_text'] : 'فاکتور رسمی');
+            echo esc_html($status_icon . ' ' . $status_label);
+            ?>
         </div>
     </div>
 

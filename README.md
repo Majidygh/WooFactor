@@ -6,12 +6,12 @@
 
 **سامانه پیشرفته و مدرن صدور و چاپ فاکتور رسمی، رسید فیش‌پرینتر، ارسال پیامک و برچسب پستی مرسوله**
 
-[![نسخه ۲.۱.۳](https://img.shields.io/badge/version-2.1.3-0f766e.svg?style=for-the-badge)](https://github.com/Majidygh/WooFactor)
+[![نسخه ۲.۱.۴](https://img.shields.io/badge/version-2.1.4-0f766e.svg?style=for-the-badge)](https://github.com/Majidygh/WooFactor)
 [![سازگار با HPOS](https://img.shields.io/badge/WooCommerce-HPOS%20Ready-96588a.svg?style=for-the-badge&logo=woocommerce&logoColor=white)](https://woocommerce.com/)
 [![PHP 7.4 تا 8.3+](https://img.shields.io/badge/PHP-7.4%20to%208.3%2B-777bb4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![مجوز MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-[امکانات کلیدی](#-امکانات-و-قابلیت‌های-کلیدی) • [قالب‌های فاکتور](#-معرفی-قالب‌های-فاکتور) • [سامانه پیامک](#-اتصال-به-سامانه‌های-پیامک-کشور) • [Changelog](#-changelog-v213) • [راهنمای نصب](#-راهنمای-نصب)
+[امکانات کلیدی](#-امکانات-و-قابلیت‌های-کلیدی) • [قالب‌های فاکتور](#-معرفی-قالب‌های-فاکتور) • [سامانه پیامک](#-اتصال-به-سامانه‌های-پیامک-کشور) • [Changelog](#-changelog-v214) • [راهنمای نصب](#-راهنمای-نصب)
 
 </div>
 
@@ -75,12 +75,15 @@
 
 ---
 
-## 📋 Changelog (v2.1.3)
+## 📋 Changelog (v2.1.4)
 
-- Added lightweight JSON file storage for manual invoices in dedicated folder (`wp-content/uploads/woo-factor/manual-invoices/`)
-- Added manual invoice archive management: view, edit, re-print, and delete past manual invoices
-- Added per-item VAT % selection (0%, 9%, 10%, custom) with live tax calculation
-- Added product SKU column with intelligent automatic hiding when all SKUs are empty
+- Added manual invoice payment status control (Paid, Unpaid, Proforma, None) and configurable watermark options
+- Improved mobile responsiveness across invoice templates, headers, customer cards, summary tables, and preview toolbar
+- Enhanced table responsiveness with horizontal scroll container preventing mobile viewport overflow
+- Added payment status badges to saved manual invoices archive
+
+### Previous Releases:
+- **v2.1.3**: Added lightweight JSON file storage for manual invoices in dedicated folder (`wp-content/uploads/woo-factor/manual-invoices/`), per-item VAT %, SKU column support.
 
 ---
 

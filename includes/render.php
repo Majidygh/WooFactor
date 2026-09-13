@@ -170,6 +170,32 @@ class Woo_Factor_Renderer {
                 color: #cbd5e1;
                 font-size: 11.5px;
             }
+            @media screen and (max-width: 768px) {
+                .woo-factor-toolbar {
+                    padding: 8px 10px;
+                }
+                .wf-tb-inner {
+                    flex-direction: column;
+                    align-items: stretch;
+                    gap: 8px;
+                }
+                .wf-tb-right {
+                    justify-content: center;
+                    width: 100%;
+                }
+                .wf-tb-left {
+                    justify-content: center;
+                    width: 100%;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .wf-hint {
+                    text-align: center;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+            }
             @media print {
                 .woo-factor-toolbar, .no-print {
                     display: none !important;

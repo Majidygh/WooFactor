@@ -387,6 +387,75 @@ foreach ($items as $it) {
             line-height: 1.5;
         }
 
+        /* Mobile Responsive Screen Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 6px 4px;
+            }
+            .invoice-box {
+                padding: 12px 10px;
+                border-radius: 6px;
+                box-shadow: none;
+                width: 100%;
+                overflow-x: hidden;
+                box-sizing: border-box;
+            }
+            .inv-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 10px;
+            }
+            .inv-header-right {
+                flex-direction: column;
+                text-align: center;
+                justify-content: center;
+            }
+            .inv-header-center h1 {
+                font-size: 14px;
+            }
+            .inv-header-left {
+                align-items: stretch;
+                width: 100%;
+            }
+            .meta-pill {
+                min-width: unset;
+                width: 100%;
+                padding: 4px 10px;
+                justify-content: space-between;
+                box-sizing: border-box;
+            }
+            .parties-grid {
+                grid-template-columns: 1fr !important;
+                gap: 10px;
+            }
+            .party-info-grid {
+                grid-template-columns: 1fr !important;
+                gap: 4px;
+            }
+            .party-info-row.full-width {
+                grid-column: span 1 !important;
+            }
+            .items-table-wrapper {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .items-table {
+                min-width: 520px;
+            }
+            .bottom-grid {
+                grid-template-columns: 1fr !important;
+                gap: 10px;
+            }
+            .watermark {
+                font-size: 32px !important;
+                padding: 8px 18px !important;
+                max-width: 90% !important;
+            }
+        }
+
         /* Print Media Styles */
         @media print {
             body {
