@@ -38,27 +38,30 @@ defined('ABSPATH') || exit;
             margin-bottom: 10px;
         }
         .header-table td { vertical-align: middle; }
-        .parties-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .sender-box-wrap {
+            width: 100%;
             margin-bottom: 8px;
+            display: flex;
+            justify-content: flex-end; /* In RTL, flex-end pushes to the left */
         }
-        .sender-box, .receiver-box {
+        .sender-box {
+            width: 50%;
             border: 1px solid #cbd5e1;
             padding: 8px 10px;
             border-radius: 4px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            background: #f8fafc;
+            text-align: right;
+            direction: rtl;
         }
         .receiver-box {
+            width: 100%;
+            border: 1px solid #86efac;
+            padding: 8px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
             background: #f0fdf4;
-            border-color: #86efac;
-        }
-        .sender-box {
-            background: #f8fafc;
-            border-color: #cbd5e1;
+            text-align: right;
+            direction: rtl;
         }
         .box-title {
             font-weight: 800;
@@ -117,29 +120,28 @@ defined('ABSPATH') || exit;
             </tr>
         </table>
 
-        <!-- Sender and Receiver Row: Receiver on Right, Sender on Left (starting from center) -->
-        <div class="parties-grid">
-            <!-- Receiver Box (Right in RTL) -->
-            <div class="receiver-box">
-                <div class="box-title">گیرنده: <?php echo esc_html($data['buyer']['shipping_name']); ?></div>
-                <div class="info-line" style="font-size: 13px; font-weight: bold; color: #0f172a;">نشانی کامل: <?php echo esc_html($data['buyer']['shipping_address'] ?: $data['buyer']['full_address']); ?></div>
-                <div class="info-line" style="margin-top: auto; padding-top: 5px;">
-                    کد پستی ۱۰ رقمی: <span class="postcode-tag"><?php echo woo_factor_fa_digits($data['buyer']['shipping_postcode'] ?: '-'); ?></span>
-                    &nbsp;&nbsp;
-                    همراه: <strong><?php echo woo_factor_fa_digits($data['buyer']['shipping_phone'] ?: '-'); ?></strong>
-                </div>
-            </div>
-
-            <!-- Sender Box (Left in RTL, starting from center) -->
+        <!-- Sender Box: Placed at top, starting from center to the left (50% width) -->
+        <div class="sender-box-wrap">
             <div class="sender-box">
                 <div class="box-title">فرستنده: <?php echo esc_html($data['seller']['name']); ?></div>
                 <div class="info-line">نشانی: <?php echo esc_html($data['seller']['address'] ?: 'دفتر مرکزی فروشگاه'); ?></div>
-                <div class="info-line" style="margin-top: auto; padding-top: 4px;">
+                <div class="info-line">
                     تلفن / همراه: <strong><?php echo esc_html(woo_factor_fa_digits(!empty($data['seller']['sender_mobile']) ? $data['seller']['sender_mobile'] : ($data['seller']['phone'] ?: '-'))); ?></strong>
                     <?php if (!empty($data['seller']['postal_code'])): ?>
                         &nbsp;|&nbsp; کد پستی: <?php echo woo_factor_fa_digits($data['seller']['postal_code']); ?>
                     <?php endif; ?>
                 </div>
+            </div>
+        </div>
+
+        <!-- Receiver Box: Full width, positioned below sender, aligned towards the right -->
+        <div class="receiver-box">
+            <div class="box-title">گیرنده: <?php echo esc_html($data['buyer']['shipping_name']); ?></div>
+            <div class="info-line" style="font-size: 13px; font-weight: bold; color: #0f172a;">نشانی کامل: <?php echo esc_html($data['buyer']['shipping_address'] ?: $data['buyer']['full_address']); ?></div>
+            <div class="info-line" style="margin-top: 5px;">
+                کد پستی ۱۰ رقمی: <span class="postcode-tag"><?php echo woo_factor_fa_digits($data['buyer']['shipping_postcode'] ?: '-'); ?></span>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                شماره همراه گیرنده: <strong><?php echo woo_factor_fa_digits($data['buyer']['shipping_phone'] ?: '-'); ?></strong>
             </div>
         </div>
 
