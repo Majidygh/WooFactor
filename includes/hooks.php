@@ -4,7 +4,7 @@
  */
 defined('ABSPATH') || exit;
 
-// 1. Admin Order Actions & Column
+// 1. Admin Order Actions & Dedicated Columns (Classic & HPOS)
 add_filter('woocommerce_admin_order_actions', function ($actions, $order) {
     $order_id = $order->get_id();
     $invoice_url = wp_nonce_url(admin_url('admin-ajax.php?action=woo_factor_view_invoice&order_id=' . $order_id), 'woo_factor_view_' . $order_id);
@@ -25,11 +25,60 @@ add_filter('woocommerce_admin_order_actions', function ($actions, $order) {
     return $actions;
 }, 10, 2);
 
+// Dedicated "فاکتور و مرسوله" column in Orders list
+function woo_factor_add_order_column($columns) {
+    $new = [];
+    foreach ($columns as $key => $title) {
+        $new[$key] = $title;
+        if ($key === 'order_status' || $key === 'order_number') {
+            $new['woo_factor_print'] = __('فاکتور و مرسوله', 'woo-factor');
+        }
+    }
+    if (!isset($new['woo_factor_print'])) {
+        $new['woo_factor_print'] = __('فاکتور و مرسوله', 'woo-factor');
+    }
+    return $new;
+}
+add_filter('manage_edit-shop_order_columns', 'woo_factor_add_order_column', 20);
+add_filter('woocommerce_shop_order_list_table_columns', 'woo_factor_add_order_column', 20);
+
+function woo_factor_render_order_column($column, $order) {
+    if ($column !== 'woo_factor_print') {
+        return;
+    }
+    if (is_numeric($order)) {
+        $order = wc_get_order($order);
+    }
+    if (!$order) {
+        return;
+    }
+    $order_id = $order->get_id();
+    $inv_url = wp_nonce_url(admin_url('admin-ajax.php?action=woo_factor_view_invoice&order_id=' . $order_id), 'woo_factor_view_' . $order_id);
+    $label_url = wp_nonce_url(admin_url('admin-ajax.php?action=woo_factor_view_label&order_id=' . $order_id), 'woo_factor_label_' . $order_id);
+    ?>
+    <div class="wf-order-col-actions" style="display:inline-flex; gap:4px; align-items:center;">
+        <a href="<?php echo esc_url($inv_url); ?>" target="_blank" rel="noopener" class="button button-small" title="<?php esc_attr_e('مشاهده و چاپ فاکتور', 'woo-factor'); ?>" style="padding:0 6px; height:24px; line-height:22px; font-size:11px;">
+            <span class="dashicons dashicons-media-spreadsheet" style="font-size:14px; width:14px; height:14px; line-height:22px; vertical-align:middle;"></span> فاکتور
+        </a>
+        <a href="<?php echo esc_url($label_url); ?>" target="_blank" rel="noopener" class="button button-small" title="<?php esc_attr_e('چاپ برچسب پستی مرسوله', 'woo-factor'); ?>" style="padding:0 6px; height:24px; line-height:22px; font-size:11px;">
+            <span class="dashicons dashicons-email-alt" style="font-size:14px; width:14px; height:14px; line-height:22px; vertical-align:middle;"></span> مرسوله
+        </a>
+    </div>
+    <?php
+}
+add_action('manage_shop_order_posts_custom_column', function ($column, $post_id) {
+    woo_factor_render_order_column($column, $post_id);
+}, 10, 2);
+add_action('woocommerce_shop_order_list_table_custom_column', function ($column, $order) {
+    woo_factor_render_order_column($column, $order);
+}, 10, 2);
+
 // Add custom icon style for admin order actions
 add_action('admin_head', function () {
     echo '<style>
         .wc-action-button-woo_factor_invoice::after { content: "\f498" !important; font-family: dashicons !important; }
         .wc-action-button-woo_factor_label::after { content: "\f475" !important; font-family: dashicons !important; }
+        .manage-column.column-woo_factor_print { width: 140px; }
     </style>';
 });
 
