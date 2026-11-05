@@ -559,7 +559,7 @@ foreach ($items as $it) {
         </div>
         <div class="ribbon-pill">
             <span class="lbl">💳 روش پرداخت:</span>
-            <strong class="val"><?php echo esc_html($data['payment_method'] ?: 'پرداخت آنلاین'); ?></strong>
+            <strong class="val"><?php echo esc_html($data['payment_method'] ?? $data['totals']['payment_method'] ?? 'پرداخت آنلاین'); ?></strong>
         </div>
         <?php 
         $status_title = !empty($data['status_name']) ? $data['status_name'] : (!empty($data['status']) ? $data['status'] : '');
@@ -632,10 +632,10 @@ foreach ($items as $it) {
                     <span class="p-lbl">نام و نشان:</span>
                     <span class="p-val"><?php echo esc_html(!empty($buyer['company']) ? $buyer['company'] . ' (' . $buyer['name'] . ')' : $buyer['name']); ?></span>
                 </div>
-                <?php if (!empty($buyer['national_code'])): ?>
+                <?php if (!empty($buyer['national_id']) || !empty($buyer['national_code'])): ?>
                     <div class="p-row">
                         <span class="p-lbl">کد ملی:</span>
-                        <span class="p-val"><?php echo woo_factor_fa_digits($buyer['national_code']); ?></span>
+                        <span class="p-val"><?php echo esc_html(woo_factor_fa_digits($buyer['national_id'] ?? $buyer['national_code'])); ?></span>
                     </div>
                 <?php endif; ?>
                 <div class="p-row">

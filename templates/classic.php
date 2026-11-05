@@ -543,7 +543,7 @@ foreach ($items as $it) {
                 </div>
                 <div class="party-info-row">
                     <span class="p-lbl">شماره اقتصادی:</span>
-                    <span class="p-val"><?php echo woo_factor_fa_digits($seller['economic_id'] ?: '-'); ?></span>
+                    <span class="p-val"><?php echo esc_html(woo_factor_fa_digits($seller['economic_code'] ?? $seller['economic_id'] ?? '-')); ?></span>
                 </div>
                 <div class="party-info-row">
                     <span class="p-lbl">شماره ثبت:</span>
@@ -579,7 +579,7 @@ foreach ($items as $it) {
                 </div>
                 <div class="party-info-row">
                     <span class="p-lbl">کد ملی / شناسه:</span>
-                    <span class="p-val"><?php echo woo_factor_fa_digits($buyer['national_code'] ?: '-'); ?></span>
+                    <span class="p-val"><?php echo esc_html(woo_factor_fa_digits($buyer['national_id'] ?? $buyer['national_code'] ?? '-')); ?></span>
                 </div>
                 <div class="party-info-row">
                     <span class="p-lbl">شماره اقتصادی:</span>

@@ -142,18 +142,37 @@ function woo_factor_get_stamp_url() {
 
 /**
  * Sanitize callback for the woo_factor_options setting (registered in admin/settings.php).
- * Keeps known keys only; each value sanitized by its type. Unknown keys dropped.
+ * Preserve saved extensions; accept only known fields from the submitted form.
  */
+// Versions before 2.2.0 defaulted customer legal fields on; reset that one flag once, keep every other setting.
+function woo_factor_migrate_customer_fields_default_off() {
+    if (get_option('woo_factor_customer_fields_default_off')) {
+        return;
+    }
+    $opts = get_option('woo_factor_options', []);
+    if (is_array($opts) && ($opts['enable_checkout_customer_type'] ?? '') === 'yes') {
+        $opts['enable_checkout_customer_type'] = 'no';
+        update_option('woo_factor_options', $opts);
+    }
+    update_option('woo_factor_customer_fields_default_off', WOO_FACTOR_VERSION);
+}
+
 function woo_factor_sanitize_options($input) {
     $defaults = woo_factor_default_options();
     $input = is_array($input) ? $input : [];
-    $clean = [];
+    $saved = get_option('woo_factor_options', []);
+    $clean = is_array($saved) ? $saved : [];
+    $checkboxes = ['attach_woocommerce', 'myaccount_page', 'show_barcode', 'show_product_image', 'show_sku', 'show_tax_column', 'show_discount_column', 'show_watermark', 'show_signature', 'enable_checkout_customer_type', 'sms_enabled'];
     foreach ($defaults as $key => $default) {
-        if (!array_key_exists($key, $input)) {
-            $clean[$key] = $default;
+        if (in_array($key, $checkboxes, true)) {
+            $clean[$key] = ($input[$key] ?? 'no') === 'yes' ? 'yes' : 'no';
             continue;
         }
-        $val = $input[$key];
+        if (!array_key_exists($key, $input)) {
+            $clean[$key] = $clean[$key] ?? $default;
+            continue;
+        }
+        $val = is_scalar($input[$key]) ? $input[$key] : '';
         if (is_bool($default) || in_array($val, ['1', '0', 1, 0, true, false], true) && in_array($key, ['require_login', 'attach_to_emails', 'show_in_myaccount'], true)) {
             $clean[$key] = (bool) $val;
         } elseif (in_array($key, ['footer_note', 'shop_address', 'invoice_terms'], true)) {

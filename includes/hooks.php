@@ -204,6 +204,7 @@ add_action('woocommerce_email_after_order_table', function ($order, $sent_to_adm
 }, 10, 4);
 
 // 7. Natural / Legal Customer Fields in Checkout
+if ((woo_factor_options()['enable_checkout_customer_type'] ?? 'no') === 'yes') {
 add_filter('woocommerce_billing_fields', function ($fields) {
     $opts = woo_factor_options();
 
@@ -258,6 +259,7 @@ add_action('woocommerce_checkout_create_order', function ($order, $data) {
 }, 10, 2);
 
 // 9. Automatic SMS Trigger on Order Status Change
+}
 add_action('woocommerce_order_status_changed', function ($order_id, $old_status, $new_status, $order) {
     $opts = woo_factor_options();
     if (($opts['sms_enabled'] ?? 'no') !== 'yes') {

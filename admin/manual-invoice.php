@@ -604,6 +604,7 @@ add_action('wp_ajax_woo_factor_generate_manual_invoice', function () {
         'national_id'     => $opts['shop_national_id'] ?? '',
         'economic_id'     => $opts['shop_economic_code'] ?? '',
         'economic_code'   => $opts['shop_economic_code'] ?? '',
+        'sender_mobile'   => $opts['sender_mobile'] ?? '',
         'registration_no' => $opts['shop_registration_no'] ?? '',
         'postal_code'     => $opts['shop_postal_code'] ?? '',
         'address'         => $opts['shop_address'] ?? '',

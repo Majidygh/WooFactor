@@ -81,6 +81,7 @@ class Woo_Factor_Invoice_Builder {
         $seller = [
             'name'            => !empty($opts['shop_name']) ? $opts['shop_name'] : get_bloginfo('name'),
             'phone'           => $opts['shop_phone'] ?? '',
+            'sender_mobile'   => $opts['sender_mobile'] ?? '',
             'email'           => !empty($opts['shop_email']) ? $opts['shop_email'] : get_bloginfo('admin_email'),
             'national_id'     => $opts['shop_national_id'] ?? '',
             'economic_code'   => $opts['shop_economic_code'] ?? '',

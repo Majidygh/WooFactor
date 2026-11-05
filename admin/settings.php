@@ -60,7 +60,7 @@ function woo_factor_render_settings_page() {
             <div class="wf-header-info">
                 <div class="wf-logo-icon">🧾</div>
                 <div>
-                    <h1 class="wf-title">فاکتورساز حرفه‌ای ووفاکتور <span class="wf-badge">نسخه ۲.۱.۰</span></h1>
+                    <h1 class="wf-title">ووفاکتور <span class="wf-badge">نسخه <?php echo esc_html(woo_factor_fa_digits(WOO_FACTOR_VERSION)); ?></span></h1>
                     <p class="wf-subtitle">مدیریت، صدور و شخصی‌سازی فاکتورهای رسمی دارایی، مدرن و رسیدهای حرارتی ووکامرس</p>
                 </div>
             </div>
@@ -163,7 +163,7 @@ function woo_factor_render_settings_page() {
             <div class="wf-tab-content" id="tab-shop">
                 <div class="wf-card">
                     <h2 class="wf-card-title">مشخصات هویتی و ثبتی فروشنده (مودی مالیاتی)</h2>
-                    <p class="wf-card-desc">این اطلاعات در کادر «مشخصات فروشنده» در فاکتورهای رسمی درج می‌گردد:</p>
+                    <p class="wf-card-desc">نام نمایشی، نشانی و اطلاعات تماس فرستنده در فاکتور و برچسب پستی استفاده می‌شود. مقادیر اولیه از تنظیمات سایت و ووکامرس گرفته می‌شوند؛ می‌توانید همه را ویرایش کنید. مشخصات حقیقی یا حقوقی فروشنده مستقل از فیلدهای مشتری است.</p>
 
                     <div class="wf-grid-2">
                         <div class="wf-input-item">
@@ -212,16 +212,16 @@ function woo_factor_render_settings_page() {
             <div class="wf-tab-content" id="tab-checkout">
                 <div class="wf-card">
                     <h2 class="wf-card-title">تنظیمات تسویه حساب و فیلدهای مشتری حقوقی / حقیقی</h2>
-                    <p class="wf-card-desc">امکان انتخاب هوشمند نوع مشتری در صفحه تسویه حساب (Checkout) ووکامرس:</p>
+                    <p class="wf-card-desc">اختیاری و به‌صورت پیش‌فرض خاموش است. در حالت خاموش، ووفاکتور هیچ فیلدی به تسویه حساب اضافه نمی‌کند و اطلاعات سفارش‌های قبلی حفظ می‌شود.</p>
 
                     <div class="wf-switch-item">
                         <label class="wf-switch">
-                            <input name="woo_factor_options[enable_checkout_customer_type]" type="checkbox" value="yes" <?php checked($opts['enable_checkout_customer_type'] ?? 'yes', 'yes'); ?>>
+                            <input aria-label="فعال‌سازی فیلدهای مشتری حقوقی" name="woo_factor_options[enable_checkout_customer_type]" type="checkbox" value="yes" <?php checked($opts['enable_checkout_customer_type'] ?? 'no', 'yes'); ?>>
                             <span class="wf-slider"></span>
                         </label>
                         <div>
                             <strong>فعال‌سازی انتخاب هوشمند مشتری حقیقی یا حقوقی (شرکت) در صفحه تسویه حساب</strong>
-                            <p class="wf-help">با فعال بودن این گزینه، خریداران سازمانی می‌توانند کد اقتصادی، شناسه ملی، شماره ثبت و نام رسمی شرکت خود را وارد کنند تا در فاکتور رسمی درج شود.</p>
+                            <p class="wf-help">در تسویه حساب کلاسیک، نوع مشتری، کد ملی / شناسه ملی و کد اقتصادی نمایش داده می‌شود. نام شرکت از فیلد استاندارد ووکامرس خوانده می‌شود.</p>
                         </div>
                     </div>
                 </div>

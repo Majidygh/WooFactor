@@ -30,6 +30,7 @@ function woo_factor_handle_view_proforma() {
     $seller = [
         'name'        => !empty($opts['shop_name']) ? $opts['shop_name'] : get_bloginfo('name'),
         'phone'       => $opts['shop_phone'] ?? '',
+        'sender_mobile' => $opts['sender_mobile'] ?? '',
         'email'       => !empty($opts['shop_email']) ? $opts['shop_email'] : get_bloginfo('admin_email'),
         'national_id' => $opts['shop_national_id'] ?? '',
         'address'     => $opts['shop_address'] ?? '',
@@ -42,6 +43,9 @@ function woo_factor_handle_view_proforma() {
         'name'          => $buyer_name,
         'company'       => '',
         'national_id'   => '',
+        'economic_id'   => '',
+        'registration_no' => '',
+        'postcode'      => '',
         'phone'         => '',
         'email'         => $current_user->exists() ? $current_user->user_email : '',
         'full_address'  => 'ثبت نشده (پیش‌فاکتور استعلام قیمت)',

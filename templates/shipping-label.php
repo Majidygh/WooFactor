@@ -110,7 +110,7 @@ defined('ABSPATH') || exit;
             <div class="box-title">فرستنده: <?php echo esc_html($data['seller']['name']); ?></div>
             <div class="info-line">نشانی: <?php echo esc_html($data['seller']['address'] ?: 'دفتر مرکزی فروشگاه'); ?></div>
             <div class="info-line">
-                تلفن / همراه فرستنده: <strong><?php echo woo_factor_fa_digits($data['seller']['phone'] ?: '-'); ?></strong>
+                تلفن / همراه فرستنده: <strong><?php echo esc_html(woo_factor_fa_digits(!empty($data['seller']['sender_mobile']) ? $data['seller']['sender_mobile'] : ($data['seller']['phone'] ?: '-'))); ?></strong>
                 <?php if (!empty($data['seller']['postal_code'])): ?>
                     &nbsp;|&nbsp; کد پستی: <?php echo woo_factor_fa_digits($data['seller']['postal_code']); ?>
                 <?php endif; ?>

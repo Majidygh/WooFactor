@@ -3,7 +3,7 @@
  * Plugin Name: فاکتورساز حرفه ای ووفاکتور | WooFactor
  * Plugin URI:  https://github.com/Majidygh/WooFactor
  * Description: پیشرفته‌ترین افزونه صدور و چاپ فاکتور رسمی دارایی، مدرن و فیش‌پرینتر حرارتی برای ووکامرس — تفکیک اشخاص حقیقی و حقوقی، سامانه پیامک خدماتی، برچسب پستی مرسوله، صدور فاکتور دستی، پیش‌فاکتور سبد خرید و چاپ گروهی سازگار با HPOS.
- * Version:     2.1.4
+ * Version:     2.2.0
  * Author:      Majidygh
  * Author URI:  https://github.com/Majidygh
  * Text Domain: woo-factor
@@ -14,7 +14,7 @@
 
 defined('ABSPATH') || exit;
 
-define('WOO_FACTOR_VERSION', '2.1.4');
+define('WOO_FACTOR_VERSION', '2.2.0');
 define('WOO_FACTOR_FILE', __FILE__);
 define('WOO_FACTOR_DIR', plugin_dir_path(__FILE__));
 define('WOO_FACTOR_URL', plugin_dir_url(__FILE__));
@@ -30,6 +30,7 @@ require_once WOO_FACTOR_DIR . 'includes/jalali.php';
 require_once WOO_FACTOR_DIR . 'includes/persian-numbers.php';
 require_once WOO_FACTOR_DIR . 'includes/helpers.php';
 require_once WOO_FACTOR_DIR . 'includes/barcode.php';
+woo_factor_migrate_customer_fields_default_off();
 require_once WOO_FACTOR_DIR . 'includes/sms.php';
 require_once WOO_FACTOR_DIR . 'includes/builder.php';
 require_once WOO_FACTOR_DIR . 'includes/render.php';
@@ -76,11 +77,11 @@ function woo_factor_default_options() {
         'shop_phone'                   => '',
         'sender_mobile'                => '',
         'shop_email'                   => get_bloginfo('admin_email'),
-        'shop_address'                 => '',
+        'shop_address'                 => implode('، ', array_filter([get_option('woocommerce_store_city', ''), get_option('woocommerce_store_address', ''), get_option('woocommerce_store_address_2', '')])),
         'shop_national_id'             => '',
         'shop_economic_code'           => '',
         'shop_registration_no'         => '',
-        'shop_postal_code'             => '',
+        'shop_postal_code'             => get_option('woocommerce_store_postcode', ''),
         'footer_note'                  => 'از خرید و اعتماد شما به فروشگاه ما سپاسگزاریم.',
         'invoice_terms'                => '۱- ارائه اصل یا تصویر این فاکتور جهت دریافت خدمات پشتیبانی الزامی است. ۲- تعویض یا مرجوعی کالا مطابق ضوابط فروشگاه تا ۷ روز امکان‌پذیر است.',
         'color'                        => '#0f766e',
@@ -99,7 +100,7 @@ function woo_factor_default_options() {
         'signature_stamp'              => 'مهر و امضای فروشگاه',
         'invoice_prefix'               => '',
         'number_mode'                  => 'auto',
-        'enable_checkout_customer_type'=> 'yes',
+        'enable_checkout_customer_type'=> 'no',
         'sms_enabled'                  => 'no',
         'sms_gateway'                  => 'ippanel',
         'sms_api_key'                  => '',
