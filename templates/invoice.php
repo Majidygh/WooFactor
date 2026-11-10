@@ -28,7 +28,7 @@ $accent = sanitize_hex_color($data['color'] ?? '') ?: '#0f766e';
 <main class="invoice-sheet">
 <header class="inv-header">
     <div class="identity">
-        <?php if ($logo): ?><img class="logo" src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr($seller['name'] ?? ''); ?>" width="100" height="56"><?php endif; ?>
+        <?php if ($logo): ?><img class="logo" src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr($seller['name'] ?? ''); ?>" width="110" height="56"><?php endif; ?>
         <div class="shop-name"><?php echo esc_html($seller['name'] ?? ''); ?></div>
         <h1 class="inv-doc-title"><?php echo esc_html($title); ?></h1>
     </div>
@@ -36,14 +36,14 @@ $accent = sanitize_hex_color($data['color'] ?? '') ?: '#0f766e';
         <div><dt>شماره</dt><dd><bdi><?php echo esc_html(woo_factor_fa_digits($number)); ?></bdi></dd></div>
         <div><dt>تاریخ</dt><dd><?php echo esc_html(woo_factor_fa_digits($data['jalali_date'] ?? '')); ?></dd></div>
         <?php if (!empty($data['jalali_time'])): ?><div><dt>ساعت</dt><dd><?php echo esc_html(woo_factor_fa_digits($data['jalali_time'])); ?></dd></div><?php endif; ?>
-        <?php if (!empty($data['status_name'])): ?><div><dt>وضعیت</dt><dd><?php echo esc_html($data['status_name']); ?></dd></div><?php endif; ?>
+        <?php if (!empty($data['status_name'])): ?><div class="status-row"><dt>وضعیت</dt><dd class="status-badge"><?php echo esc_html($data['status_name']); ?></dd></div><?php endif; ?>
     </dl>
 </header>
 <?php if (($data['show_watermark'] ?? true) && !empty($data['watermark_text']) && $data['watermark_text'] !== ($data['status_name'] ?? '') && (empty($data['status_name']) || ($data['watermark_mode'] ?? '') === 'custom' || !in_array($data['watermark_text'], ['پرداخت شد', 'در انتظار پرداخت', 'باطل شد', 'مرجوع شد', 'پیش‌فاکتور', 'تسویه نشده'], true))): ?>
 <p class="document-status"><?php echo esc_html($data['watermark_text']); ?></p>
 <?php endif; ?>
 <div class="parties">
-<?php foreach (['seller' => 'فروشنده', 'buyer' => 'خریدار'] as $role => $label):
+<?php foreach (['seller' => 'فروشنده', 'buyer' => 'خریدار'] as $role => $role_label):
     $party = $role === 'seller' ? $seller : $buyer;
     $fields = [
         'نام' => !empty($party['company']) ? $party['company'] . ' (' . ($party['name'] ?? '') . ')' : ($party['name'] ?? ''),
@@ -54,9 +54,10 @@ $accent = sanitize_hex_color($data['color'] ?? '') ?: '#0f766e';
         'تلفن' => $party['phone'] ?? '',
         'نشانی' => $party['full_address'] ?? $party['address'] ?? '',
     ]; ?>
-<section class="party"><h2><?php echo esc_html($label); ?><?php if (!empty($party['customer_type'])): ?><span><?php echo $party['customer_type'] === 'legal' ? 'حقوقی' : 'حقیقی'; ?></span><?php endif; ?></h2>
-<dl><?php foreach ($fields as $label => $value): if ($value === '' && !$classic) continue; ?>
-<div><dt><?php echo esc_html($label); ?></dt><dd><?php echo $value !== '' ? esc_html(woo_factor_fa_digits($value)) : 'ثبت نشده'; ?></dd></div>
+<section class="party party-<?php echo esc_attr($role); ?>">
+<h2><?php echo esc_html($role_label); ?><?php if (!empty($party['customer_type'])): ?><span><?php echo $party['customer_type'] === 'legal' ? 'شخص حقوقی' : 'شخص حقیقی'; ?></span><?php endif; ?></h2>
+<dl><?php foreach ($fields as $field_label => $value): if ($value === '' && !$classic) continue; ?>
+<div class="<?php echo in_array($field_label, ['نام', 'نشانی'], true) ? 'full-width' : ''; ?>"><dt><?php echo esc_html($field_label); ?></dt><dd><?php echo $value !== '' ? esc_html(woo_factor_fa_digits($value)) : 'ثبت نشده'; ?></dd></div>
 <?php endforeach; ?></dl></section>
 <?php endforeach; ?>
 </div>
@@ -93,7 +94,7 @@ $accent = sanitize_hex_color($data['color'] ?? '') ?: '#0f766e';
 </div>
 <table class="totals-table"><caption class="sr-only">خلاصه مبالغ</caption><tbody>
 <?php foreach (['subtotal' => 'جمع اقلام', 'discount' => 'تخفیف', 'shipping' => 'هزینه ارسال', 'tax' => 'مالیات'] as $key => $label): if ($key !== 'subtotal' && empty($totals[$key])) continue; ?>
-<tr><th scope="row"><?php echo esc_html($label); ?></th><td><?php echo woo_factor_number_format($totals[$key] ?? 0); ?></td></tr>
+<tr class="<?php echo $key === 'discount' ? 'discount-row' : ''; ?>"><th scope="row"><?php echo esc_html($label); ?></th><td><?php echo woo_factor_number_format($totals[$key] ?? 0); ?></td></tr>
 <?php endforeach; ?>
 <tr class="grand-total"><th scope="row">مبلغ نهایی <small><?php echo esc_html($currency); ?></small></th><td><?php echo woo_factor_number_format($totals['grand_total'] ?? 0); ?></td></tr>
 </tbody></table>
