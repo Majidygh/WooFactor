@@ -3,7 +3,7 @@
  * Plugin Name: فاکتورساز حرفه ای ووفاکتور | WooFactor
  * Plugin URI:  https://github.com/Majidygh/WooFactor
  * Description: پیشرفته‌ترین افزونه صدور و چاپ فاکتور رسمی دارایی، مدرن و فیش‌پرینتر حرارتی برای ووکامرس — تفکیک اشخاص حقیقی و حقوقی، سامانه پیامک خدماتی، برچسب پستی مرسوله، صدور فاکتور دستی، پیش‌فاکتور سبد خرید و چاپ گروهی سازگار با HPOS.
- * Version:     2.3.0
+ * Version:     2.4.0
  * Author:      Majidygh
  * Author URI:  https://github.com/Majidygh
  * Text Domain: woo-factor
@@ -14,7 +14,7 @@
 
 defined('ABSPATH') || exit;
 
-define('WOO_FACTOR_VERSION', '2.3.0');
+define('WOO_FACTOR_VERSION', '2.4.0');
 define('WOO_FACTOR_FILE', __FILE__);
 define('WOO_FACTOR_DIR', plugin_dir_path(__FILE__));
 define('WOO_FACTOR_URL', plugin_dir_url(__FILE__));
@@ -70,7 +70,7 @@ function woo_factor_deactivate() {
 
 function woo_factor_default_options() {
     return [
-        'template'                     => 'modern',
+        'template'                     => 'classic',
         'logo_id'                      => 0,
         'stamp_image_id'               => 0,
         'shop_name'                    => get_bloginfo('name'),

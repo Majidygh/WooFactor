@@ -45,7 +45,7 @@ file_put_contents("$dir/order-box.html", '<html lang="fa" dir="rtl"><meta charse
 file_put_contents("$dir/order.json", json_encode(['id'=>$order->get_id(), 'key'=>$order->get_order_key()]));
 delete_option('woo_factor_options');
 $def_opts = woo_factor_default_options();
-wf_check($def_opts['template'] === 'modern', 'default template is modern');
-$def_render = Woo_Factor_Renderer::render_html($data);
-wf_check(strpos($def_render, 'inv-doc-title') !== false, 'renderer fallback defaults to modern');
+wf_check($def_opts['template'] === 'classic', 'default template is classic');
+$def_render = Woo_Factor_Renderer::render_html($data, $def_opts['template']);
+wf_check(strpos($def_render, 'inv-header') !== false, 'renderer default template renders classic');
 echo 'WordPress ' . get_bloginfo('version') . '; WooCommerce ' . WC_VERSION . "\n";

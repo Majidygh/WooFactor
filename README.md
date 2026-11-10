@@ -6,7 +6,7 @@
 
 **سامانه پیشرفته و مدرن صدور و چاپ فاکتور رسمی، رسید فیش‌پرینتر، ارسال پیامک و برچسب پستی مرسوله**
 
-[![نسخه ۲.۱.۴](https://img.shields.io/badge/version-2.1.4-0f766e.svg?style=for-the-badge)](https://github.com/Majidygh/WooFactor)
+[![نسخه ۲.۴.۰](https://img.shields.io/badge/version-2.4.0-0f766e.svg?style=for-the-badge)](https://github.com/Majidygh/woo-factor)
 [![سازگار با HPOS](https://img.shields.io/badge/WooCommerce-HPOS%20Ready-96588a.svg?style=for-the-badge&logo=woocommerce&logoColor=white)](https://woocommerce.com/)
 [![PHP 7.4 تا 8.3+](https://img.shields.io/badge/PHP-7.4%20to%208.3%2B-777bb4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![مجوز MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
@@ -25,16 +25,16 @@
 صورتحساب رسمی فروش کالا و خدمات؛ مجهز به تفکیک اشخاص حقیقی و حقوقی، کد اقتصادی، شناسه ملی، شماره ثبت، تفکیک مالیات و ارزش افزوده، مبالغ به حروف فارسی، مهر رسمی و بارکد خطی سفارش.
 
 <div align="center">
-  <img src="assets/images/template-classic.svg?v=2.1.1" alt="قالب رسمی دارایی" width="680" />
+  <img src="docs/screenshots/classic.png" alt="پیش‌نمایش آزمایشی قالب کلاسیک" width="680" />
 </div>
 
 ---
 
-### ۲. قالب مدرن و کارت‌محور (Modern Clean)
-طراحی مینیمال و کارت‌بندی شده برای فروشگاه‌های دیجیتال و آنلاین‌شاپ‌ها. دارای رنگ سازمانی قابل شخصی‌سازی، تصاویر بندانگشتی کالاها، کارت‌های تفکیکی مشتری و بارکد رهگیری.
+### ۲. قالب مدرن
+فاکتور فشرده با مشخصات فروشنده و خریدار در دو ستون، جمع نهایی مشخص و نمایش اقلام به صورت خوانا در موبایل. رنگ انتخابی فروشگاه در خط سربرگ استفاده می‌شود تا خوانایی متن به رنگ سفارشی وابسته نباشد. انتخاب ذخیره‌شده قالب در فروشگاه‌های موجود تغییر نمی‌کند.
 
 <div align="center">
-  <img src="assets/images/template-modern.svg?v=2.1.1" alt="قالب مدرن" width="680" />
+  <img src="docs/screenshots/modern.png" alt="پیش‌نمایش آزمایشی قالب مدرن" width="680" />
 </div>
 
 ---
@@ -74,6 +74,14 @@
 | **SMS.ir** | وب‌سرویس ارسال سریع (Verify Fast) | ✅ بله (فوری) |
 
 ---
+
+## تغییرات نسخه ۲.۴.۰
+
+- بازطراحی قالب مدرن و کلاسیک با چیدمان متفاوت، چاپ کم‌مصرف و نمایش موبایل بدون پیمایش افقی.
+- تنظیم قالب کلاسیک (رسمی دارایی) به عنوان قالب پیش‌فرض پرینت و سیستم.
+- نمایش مبلغ به حروف، شرایط فروشنده و شناسه تراکنش در هر دو قالب.
+- رعایت تنظیمات نمایش کد کالا، مالیات، تخفیف و امضا؛ حذف ادعای تایید مالیاتی از خود فاکتور.
+- ساده‌سازی ابزار چاپ و انتخاب قالب. پیش‌نمایش‌های نسخه جدید با داده آزمایشی در `docs/screenshots/` هستند.
 
 ## 📋 Changelog (v2.1.4)
 
