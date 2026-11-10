@@ -59,9 +59,9 @@ foreach ($items as $it) {
             margin: 0 auto;
             background: #ffffff;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 22px 24px;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
         }
         .watermark {
             position: absolute;
@@ -152,8 +152,8 @@ foreach ($items as $it) {
             gap: 6px;
             background: #f8fafc;
             border: 1px solid #cbd5e1;
-            border-radius: 20px;
-            padding: 3px 12px;
+            border-radius: 3px;
+            padding: 3px 10px;
             font-size: 10px;
             color: #475569;
             min-width: 155px;
@@ -163,7 +163,7 @@ foreach ($items as $it) {
             color: #0f172a;
         }
 
-        /* Parties: Symmetrical Modern Cards */
+        /* Parties: Symmetrical Cards */
         .parties-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -172,7 +172,7 @@ foreach ($items as $it) {
         }
         .party-card {
             border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
+            border-radius: 4px;
             background: #ffffff;
             padding: 10px 12px;
         }
@@ -189,8 +189,8 @@ foreach ($items as $it) {
             color: #ffffff;
             font-size: 10.5px;
             font-weight: 800;
-            padding: 3px 12px;
-            border-radius: 14px;
+            padding: 2px 8px;
+            border-radius: 3px;
             display: inline-block;
         }
         .party-badge-buyer {
@@ -199,8 +199,8 @@ foreach ($items as $it) {
         .entity-tag {
             font-size: 9.5px;
             font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
             background: #f1f5f9;
             color: #334155;
             border: 1px solid #cbd5e1;

@@ -59,7 +59,7 @@ class Woo_Factor_Renderer {
     /**
      * Build floating action toolbar for web view.
      */
-    public static function get_toolbar_html($data, $current_template = 'classic') {
+    public static function get_toolbar_html($data, $current_template = 'modern') {
         $order_id = $data['order_id'] ?? 0;
         $order_num = $data['order_number'] ?? '';
         $current_url = remove_query_arg(['template']);
@@ -223,14 +223,14 @@ class Woo_Factor_Renderer {
     public static function render_html($data, $template_key = null) {
         $opts = woo_factor_options();
         if (empty($template_key)) {
-            $template_key = $opts['template'] ?? 'classic';
+            $template_key = $opts['template'] ?? 'modern';
         }
 
         $templates = woo_factor_templates();
-        $template_file = $templates[$template_key]['file'] ?? $templates['classic']['file'];
+        $template_file = $templates[$template_key]['file'] ?? $templates['modern']['file'];
 
         if (!file_exists($template_file)) {
-            $template_file = WOO_FACTOR_DIR . 'templates/classic.php';
+            $template_file = WOO_FACTOR_DIR . 'templates/modern.php';
         }
 
         ob_start();

@@ -82,19 +82,19 @@ function woo_factor_invoice_url($order) {
 
 function woo_factor_templates() {
     return [
+        'modern' => [
+            'name' => 'قالب مدرن و استاندارد (پیش‌فرض)',
+            'desc' => 'طراحی شرکتی و فروشگاهی مدرن، ساختاریافته، بسیار خوانا و بهینه‌سازی‌شده برای چاپ رسمی',
+            'file' => WOO_FACTOR_DIR . 'templates/modern.php',
+        ],
         'classic' => [
-            'name' => 'قالب رسمی دارایی (استاندارد مالیاتی)',
+            'name' => 'قالب رسمی دارایی (ماده ۱۹ مالیاتی)',
             'desc' => 'صورتحساب رسمی استاندارد سازمان امور مالیاتی کشور با تفکیک حقیقی/حقوقی، کد اقتصادی و شناسه ملی',
             'file' => WOO_FACTOR_DIR . 'templates/classic.php',
         ],
-        'modern' => [
-            'name' => 'قالب مدرن استاندارد (WooFactor Modern)',
-            'desc' => 'طراحی تمیز، شیک و بدون حاشیه با ساختار کارت‌محور مدرن، رنگ سازمانی و بارکد خطی تمیز',
-            'file' => WOO_FACTOR_DIR . 'templates/modern.php',
-        ],
         'thermal' => [
             'name' => 'قالب فیش‌پرینتر حرارتی (Thermal 80mm)',
-            'desc' => 'مناسب دستگاه‌های صدور فیش و پوز فروشگاهی با عرض ۸۰ میلی‌متر و خروجی سریع',
+            'desc' => 'مخصوص دستگاه‌های صدور فیش و پوز فروشگاهی با عرض ۸۰ میلی‌متر و کمترین مصرف کاغذ',
             'file' => WOO_FACTOR_DIR . 'templates/thermal.php',
         ],
     ];

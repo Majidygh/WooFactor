@@ -132,7 +132,7 @@ add_action('wp_ajax_woo_factor_bulk_invoices', function () {
     }
 
     $opts = woo_factor_options();
-    $template = $opts['template'] ?? 'classic';
+    $template = $opts['template'] ?? 'modern';
 
     $output = '';
     foreach ($ids as $order_id) {

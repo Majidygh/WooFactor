@@ -19,6 +19,11 @@ wp-test/
 wordpress/
 wp-content/uploads/
 
+# Tooling and agent metadata
+.agents/
+.hermes/
+.specify/
+
 # Archives and generated artifacts
 *.zip
 !WooFactor.zip

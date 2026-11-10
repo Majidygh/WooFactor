@@ -95,7 +95,7 @@ function woo_factor_list_manual_invoice_files() {
             'items_count'    => count($json['items'] ?? []),
             'grand_total'    => $json['totals']['grand_total'] ?? 0,
             'currency'       => $json['totals']['currency'] ?? 'تومان',
-            'template'       => $json['template'] ?? 'classic',
+            'template'       => $json['template'] ?? 'modern',
             'payment_status' => $payment_status,
             'status_name'    => $status_name,
             'created_at'     => $json['created_at'] ?? filemtime($file),
@@ -142,7 +142,7 @@ function woo_factor_render_manual_invoice_page() {
     }
 
     $default_inv_num = $is_edit ? $edit_data['invoice_number'] : ('MAN-' . wp_rand(10000, 99999));
-    $default_template = $is_edit ? ($edit_data['template'] ?? 'classic') : ($opts['template'] ?? 'classic');
+    $default_template = $is_edit ? ($edit_data['template'] ?? 'modern') : ($opts['template'] ?? 'modern');
     $default_currency = $is_edit ? ($edit_data['currency'] ?? 'تومان') : 'تومان';
     $default_payment_status = $is_edit ? ($edit_data['payment_status'] ?? ($edit_data['status'] ?? 'paid')) : 'paid';
     $default_watermark_mode = $is_edit ? ($edit_data['watermark_mode'] ?? 'auto') : 'auto';
@@ -223,10 +223,10 @@ function woo_factor_render_manual_invoice_page() {
                     </div>
                     <div>
                         <label><strong>قالب فاکتور:</strong></label><br>
-                        <select name="template" style="width: 100%;">
-                            <option value="classic" <?php selected($default_template, 'classic'); ?>>قالب رسمی دارایی (Classic Tax)</option>
-                            <option value="modern" <?php selected($default_template, 'modern'); ?>>قالب مدرن و لوکس (Modern Clean)</option>
-                            <option value="thermal" <?php selected($default_template, 'thermal'); ?>>قالب فیش‌پرینتر حرارتی (Thermal 80mm)</option>
+                        <select name="template" style="width: 100%; font-weight: 600;">
+                            <option value="modern" <?php selected($default_template, 'modern'); ?>>قالب مدرن و استاندارد (پیش‌فرض)</option>
+                            <option value="classic" <?php selected($default_template, 'classic'); ?>>قالب رسمی دارایی (ماده ۱۹ مالیاتی)</option>
+                            <option value="thermal" <?php selected($default_template, 'thermal'); ?>>قالب فیش‌پرینتر حرارتی (۸۰ میلی‌متری)</option>
                         </select>
                     </div>
                     <div>
@@ -438,7 +438,10 @@ function woo_factor_render_manual_invoice_page() {
                             <tr>
                                 <td>
                                     <strong><?php echo esc_html($inv['invoice_number']); ?></strong>
-                                    <div style="font-size: 10px; color: #64748b;">قالب: <?php echo esc_html($inv['template']); ?></div>
+                                    <div style="font-size: 10px; color: #64748b;">قالب: <?php 
+                                        $tpl_labels = ['modern' => 'مدرن', 'classic' => 'رسمی دارایی', 'thermal' => 'حرارتی'];
+                                        echo esc_html($tpl_labels[$inv['template']] ?? $inv['template']); 
+                                    ?></div>
                                 </td>
                                 <td><strong><?php echo esc_html($inv['buyer_name']); ?></strong></td>
                                 <td><?php echo woo_factor_fa_digits($inv['buyer_phone']); ?></td>
@@ -589,7 +592,7 @@ add_action('wp_ajax_woo_factor_generate_manual_invoice', function () {
     check_admin_referer('woo_factor_manual_nonce');
 
     $opts = woo_factor_options();
-    $template = sanitize_text_field($_POST['template'] ?? 'classic');
+    $template = sanitize_text_field($_POST['template'] ?? 'modern');
     $currency = sanitize_text_field($_POST['currency'] ?? 'تومان');
     $inv_num  = sanitize_text_field(wp_unslash($_POST['invoice_number'] ?? ('MAN-' . rand(10000, 99999))));
     $inv_num  = preg_replace('/[^A-Za-z0-9\\-_]/', '', $inv_num);
@@ -793,7 +796,7 @@ add_action('wp_ajax_woo_factor_view_saved_manual_invoice', function () {
         wp_die('فاکتور مورد نظر در آرشیو یافت نشد.');
     }
 
-    $template = $data['template'] ?? 'classic';
+    $template = !empty($_GET['template']) ? sanitize_text_field($_GET['template']) : ($data['template'] ?? 'modern');
 
     // Ensure barcode SVG is generated
     if (empty($data['barcode_svg'])) {

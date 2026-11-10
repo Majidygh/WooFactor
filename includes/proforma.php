@@ -127,6 +127,6 @@ function woo_factor_handle_view_proforma() {
         'show_signature'       => true,
     ];
 
-    echo Woo_Factor_Renderer::render_html($data, $opts['template'] ?? 'classic');
+    echo Woo_Factor_Renderer::render_html($data, $opts['template'] ?? 'modern');
     exit;
 }
